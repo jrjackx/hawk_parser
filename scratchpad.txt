@@ -1,0 +1,46 @@
+make an error handle function
+
+reports on what line an error has occured. then gives a baked message based on an enum of error type.
+
+enum {
+    illegal_symbol
+    illegal_identifier
+    illegal_number
+    unexpected_symbol
+} error_type
+
+then a quick switch statement to figure out the kind of error
+
+    switch error_type
+    case illegal_symbol: error on line l->line_count, l->strings[l->line_count] is an illegal symbol.
+    so on.
+
+i should allow \n to be recorded. basically means that every lex operation can't just be simple as moving the cursor along
+make a lex() function which operates on l,
+
+    while(l->strings[l->cursor] == '\n') {
+        l->line_count
+    }
+
+
+
+put a token section thats just like char[16] or something in Lex_Array
+then there needs to be a function inside of lex() which determines what the token should be.
+maybe lex can even return that function instead of the word.:
+
+i need to be able to get a lexeme and determine what token that lexeme belongs to. easy ones:
+PROGRAM
+INPUT
+OUTPUT
+STMT_SEC (starts with begin)
+
+at the start:
+you do lex(l). lex(l) moves the cursor forward and then assigns itself the next token. THEN you decide what to do based off of that token. then lex(l) goes at the beginning of the next function.
+
+so
+lex(l) makes token = PROGRAM at start
+then determine what to do based off of that. open a function.
+then inside that function, lex(l).
+
+when getting to DECL_SEC, i'll need to have another dynamic array of strings which will be able to hold the declared variables.
+then, when checking later in the right context, run through the array to see if the string is identifiable.T
