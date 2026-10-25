@@ -1,17 +1,18 @@
 #include "library.h"
 
-void parse_error(Lex_Array* l, ERROR_TYPE e) {
+void parse_error(Lex_Array* l, ERROR_TYPE e, char* reason) {
     
     switch (e) {
 
         case ILLEGAL_SYMBOL:
-            fprintf(stderr, "Error on line %zu: unrecognized symbol \"%s\". Did you declare it?\n",
-                    l->line_count, l->strings[l->cursor]);
+            fprintf(stderr, "Error on line %zu: illegal symbol \"%s\": %s\n",
+                    l->line_count, l->strings[l->cursor], reason);
             exit(EXIT_FAILURE);
             break;
 
         case ILLEGAL_IDENTIFIER:
-            fprintf(stderr, "TODO MAKE A PROPER ERROR MESSAGE HERE\n");
+            fprintf(stderr, "Error on line %zu: illegal identifier \"%s\": %s\n",
+                    l->line_count, l->strings[l->cursor], reason);
             exit(EXIT_FAILURE);
             break;
             
@@ -20,9 +21,21 @@ void parse_error(Lex_Array* l, ERROR_TYPE e) {
             exit(EXIT_FAILURE);
             break;
        
-        case EXPECTED_PROGRAM:
-            fprintf(stderr, "Error on line %zu: code must begin with program token\n", l->line_count);
+        case UNKNOWN_TYPE:
+            fprintf(stderr, "Error on line %zu: unknown type \"%s\". Acceptable types are\
+int, float, or double.\n", l->line_count, l->strings[l->cursor]);  
             exit(EXIT_FAILURE);
+            break;
+
+        case EXPECTED_PROGRAM:
+            fprintf(stderr, "Error on line %zu: expected \"program\" but recieved\
+\"%s\" instead.\n", l->line_count, l->strings[l->cursor]);
+            exit(EXIT_FAILURE);
+            break;
+
+        case EXPECTED_SEMICOLON:
+            fprintf(stderr, "Error on line %zu: missing semicolon: %s\n",
+                    l->line_count, l->strings[l->cursor], reason);
             break;
     }
 }

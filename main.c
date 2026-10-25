@@ -16,13 +16,12 @@ int main(int argc, char* argv[]) {
     fclose(the_file);
     
     lex(l);
-    if (strcmp("PROGRAM", l->token) != 0){
-       parse_error(l, EXPECTED_PROGRAM);
+    if (!lex_is(l, "program")) { /* TODO finish this part */
+       parse_error(l, EXPECTED_PROGRAM, "N/A");
     }
 
     else {
 
-        printf("%s\n", l->token);
         program(l);
     }
 

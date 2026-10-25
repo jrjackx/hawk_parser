@@ -1,6 +1,6 @@
+program
 
-
-x, y: int;
+program, y: int;
 
 begin
     input x,y;

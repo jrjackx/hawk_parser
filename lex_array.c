@@ -115,22 +115,19 @@ void lex(Lex_Array* l) {
         l->cursor++;
         l->line_count++;
     }
-
-    set_token(l);
 }
 
-void set_token(Lex_Array* l) {
+bool lex_is(Lex_Array* l, char* comparison) {
 
-    char* lex = l->strings[l->cursor];
-    if (strcmp(lex, "program") == 0) {l->token = "PROGRAM";}
-    else if (strcmp(lex, "begin") != 0 && l->token == "PROGRAM") (l->token = "DECL_SEC");
-    else if (l->token == "DECL_SEC") (l->token = "DECL");
-    else if (strcmp(lex, "begin") == 0) {l->token = "STMT_SEC";}
-    else if (strcmp(lex, "input") == 0) {l->token = "INPUT";}
-    else if (strcmp(lex, "output") == 0) {l->token = "OUTPUT";}
-    else (l->token = "UNIDENTIFIED");
+    if(strcmp(l->strings[l->cursor], comparison) == 0) {return true;}
+    return false;
 }
 
+void set_token(Lex_Array* l, char* token) {
+
+    l->token = token;
+    printf("%s\n", l->token);
+}
 
 
 
