@@ -1,0 +1,67 @@
+make an error handle function
+
+reports on what line an error has occured. then gives a baked message based on an enum of error type.
+
+enum {
+    illegal_symbol
+    illegal_identifier
+    illegal_number
+    unexpected_symbol
+} error_type
+
+then a quick switch statement to figure out the kind of error
+
+    switch error_type
+    case illegal_symbol: error on line l->line_count, l->strings[l->line_count] is an illegal symbol.
+    so on.
+
+i should allow \n to be recorded. basically means that every lex operation can't just be simple as moving the cursor along
+make a lex() function which operates on l,
+
+    while(l->strings[l->cursor] == '\n') {
+        l->line_count
+    }
+
+
+
+put a token section thats just like char[16] or something in Lex_Array
+then there needs to be a function inside of lex() which determines what the token should be.
+maybe lex can even return that function instead of the word.:
+
+i need to be able to get a lexeme and determine what token that lexeme belongs to. easy ones:
+PROGRAM
+INPUT
+OUTPUT
+STMT_SEC (starts with begin)
+
+at the start:
+you do lex(l). lex(l) moves the cursor forward and then assigns itself the next token. THEN you decide what to do based off of that token. then lex(l) goes at the beginning of the next function.
+
+so
+lex(l) makes token = PROGRAM at start
+then determine what to do based off of that. open a function.
+then inside that function, lex(l).
+
+when getting to DECL_SEC, i'll need to have another dynamic array of strings which will be able to hold the declared variables.
+then, when checking later in the right context, run through the array to see if the string is identifiable.T
+
+10/24/26
+What am i even doing right now?
+last time i put in the other dynamic array for declared variables, i'm sure that's fine.
+just now removed the iterative process of putting the token.
+I'll have the recreate the output i had before using recursion instead.
+
+this_lex(): compares the lexeme at the cursor with an input string, and returns true or false. easy.
+now instead of checking for a bunch of precondition bullshit, i just do a basic comparison
+and then set the token as to what it should be in the code block.
+
+now i need to figure out whether or not there's a declaration statement or not.
+intuitively, check if the next statement is "begin". if it is, then start statement.
+otherwise, the lex is already positioned on the first variable to be assigned.
+so it goes decl_sec -> decl -> id_list (any number), then back out.
+decl_sec is simple. it just goes to decl, then at the end, check to see if the token is begin.
+if it is, then exit, and in program go to stmt sec.
+inside decl, we start with an ID_LIST call. then lex(), then check: , or :?
+if comma, ID_LIST again. if colon, lex(), check for "int"|"float"|"double", then exit.
+inside make_id_list: check current lex's 1st character and subsequent characters until hitting \0.
+if valid, check id_list size-capacity, then add it.
